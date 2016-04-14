@@ -1,11 +1,18 @@
 /* Freetail Colors */
-html, body {
+html {
   height: 100%; }
+
+body {
+  min-height: 100% !important;
+  background: #73A8B8; }
 
 /* Main hero */
 .main-hero {
   background: #73A8B8;
-  height: 100%; }
+  font-family: 'Montserrat', sans-serif;
+  min-height: 100%; }
+  .main-hero p {
+    font-family: 'Montserrat', sans-serif; }
 
 .generated-row {
   padding-top: 1%;
@@ -13,6 +20,11 @@ html, body {
 
 .table {
   border-color: black; }
+
+.commit-box li {
+  list-style-type: none;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1em; }
 
 caption {
   font-size: 150%;
