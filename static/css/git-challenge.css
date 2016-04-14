@@ -1,0 +1,81 @@
+/* Freetail Colors */
+html, body {
+  height: 100%; }
+
+/* Main hero */
+.main-hero {
+  background: #73A8B8;
+  height: 100%; }
+
+.generated-row {
+  padding-top: 1%;
+  font-size: 125%; }
+
+.table {
+  border-color: black; }
+
+caption {
+  font-size: 150%;
+  color: black; }
+
+.table th, .table td {
+  border-top: none !important; }
+
+/* Nav */
+.navbar-default {
+  background-color: #2F2922;
+  border-color: #4a4036; }
+  .navbar-default .navbar-brand {
+    color: #ecf0f1; }
+    .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
+      color: #E5CCA8; }
+  .navbar-default .navbar-text {
+    color: #ecf0f1; }
+  .navbar-default .navbar-nav > li > a {
+    color: #ecf0f1; }
+    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+      color: #E5CCA8; }
+  .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+    color: #E5CCA8;
+    background-color: #4a4036; }
+  .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    color: #E5CCA8;
+    background-color: #4a4036; }
+  .navbar-default .navbar-toggle {
+    border-color: #4a4036; }
+    .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
+      background-color: #4a4036; }
+    .navbar-default .navbar-toggle .icon-bar {
+      background-color: #ecf0f1; }
+  .navbar-default .navbar-collapse,
+  .navbar-default .navbar-form {
+    border-color: #ecf0f1; }
+  .navbar-default .navbar-link {
+    color: #ecf0f1; }
+    .navbar-default .navbar-link:hover {
+      color: #E5CCA8; }
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #ecf0f1; }
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+      color: #E5CCA8; }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #E5CCA8;
+    background-color: #4a4036; } }
+/*.navbar-nav {
+  width: 75%;
+}
+
+.navbar-nav li {
+  width: 33%;
+}
+
+.active {
+  width:100%;
+}*/
+/*.nav li {
+  padding-left: 4em;
+}*/
+
+/*# sourceMappingURL=git-challenge.css.map */
