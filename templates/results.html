@@ -1,3 +1,6 @@
 <body>
-	{{ streak }}
+	Current Streak: {{ streak }}
+	{% for day in keys %}
+		<li>{{commits[day]}} contributions on {{day}}</li>
+	{% endfor %}
 </body>
