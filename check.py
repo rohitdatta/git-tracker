@@ -3,7 +3,7 @@ import urllib2
 import requests
 
 from flask import Flask, render_template, jsonify
-from bs4 import BeautifulSoup
+from lxml import html
 
 app = Flask(__name__)
 #host = os.environ.get('HOST')
@@ -17,10 +17,10 @@ def index():
 	return render_template('index.html', host=host)
 
 def get_streak(username):
-	r = requests.get('https://github.com/'+username)
-	soup = BeautifulSoup(r.text)
-	contrib_nums = [contrib.text for contrib in soup.findAll('span', attrs={'class': 'contrib-number'})]
-	return contrib_nums[-1]
+	page = requests.get('https://github.com/'  + username)
+	page_tree = html.fromstring(page.content)
+	current_streaks = page_tree.xpath('//*[@id="contributions-calendar"]/div[5]/span[2]/text()')
+	return current_streaks[0]
 
 @app.route('/<username>')
 def get_info(username):
@@ -38,4 +38,4 @@ def github_username(github_username):
 	return jsonify(results=activity)
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run(debug=False)
