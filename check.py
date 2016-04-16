@@ -28,12 +28,12 @@ def get_commits(username, streak, page_tree):
 
 	current_iteration_day = datetime.date.today() - datetime.timedelta(days=day_streak)
 	end_day = datetime.date.today() + datetime.timedelta(days=1)
-
 	while current_iteration_day != end_day:
 		current_commit = page_tree.xpath('//rect[@data-date="' + str(current_iteration_day) + '"]/@data-count')
+		if not current_commit:
+			break
 		commit_dict[str(current_iteration_day)] = current_commit[0]
 		current_iteration_day += datetime.timedelta(days=1)
-
 	return commit_dict
 
 @app.route('/<username>')
