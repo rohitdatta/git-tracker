@@ -24,8 +24,10 @@ def get_streak(username, page_tree):
 	current_streaks = page_tree.xpath('//*[@id="contributions-calendar"]/div[5]/span[2]/text()')
 	return current_streaks
 
-def get_commits(username, streak, page_tree):
+def get_commits(username, page_tree):
 	commit_dict = {}
+	streak = get_streak(username, page_tree)[0]
+	
 	day_streak = 0 if int(streak.split()[0]) == 0 else int(streak.split()[0]) - 1
 
 	current_iteration_day = datetime.date.today() - datetime.timedelta(days=day_streak)
@@ -36,7 +38,10 @@ def get_commits(username, streak, page_tree):
 			break
 		commit_dict[str(current_iteration_day)] = current_commit[0]
 		current_iteration_day += datetime.timedelta(days=1)
-	return commit_dict
+		
+	commit_keys = commit_dict.keys()
+	commit_keys.sort()
+	return commit_keys, commit_dict, day_streak
 
 @app.route('/results', endpoint='get-results', methods=['POST'])
 def get_results():
@@ -46,16 +51,14 @@ def get_results():
 @app.route('/<username>')
 def get_info(username):
 	page = requests.get('https://github.com/'  + username)
-	page_tree = html.fromstring(page.content)
-	streak = get_streak(username, page_tree)
-	if streak == []:
+	if page.status_code == 400:
 		return render_template('404.html')
+	page_tree = html.fromstring(page.content)
 
-	commit_dict = get_commits(username, streak[0], page_tree)
+	commit_keys, commit_dict, streak = get_commits(username, page_tree)
 
-	commit_keys = commit_dict.keys()
-	commit_keys.sort()
-	return render_template('results.html', streak=streak[0], commits=commit_dict, keys=commit_keys)
+	print commit_dict
+	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys)
 
 @app.route('/github/<github_username>')
 def github_content(github_username):

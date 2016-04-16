@@ -1,6 +1,21 @@
-<body>
-	Current Streak: {{ streak }}
-	{% for day in keys %}
-		<li>{{commits[day]}} contributions on {{day}}</li>
-	{% endfor %}
-</body>
+{% extends 'base.html' %}
+{% block content %}
+    <section class="main-hero jumbotron">
+        <h1>Results So Far</h1>
+        <p>Current Streak: {{ streak }}</p>
+        <div class="container">
+            <div class="row clearfix">
+                <div class="col-md-8 col-md-offset-2 column" id="box">
+                    <table class="table">
+                        <caption class="text-center"></caption>
+                        <tbody>
+							{% for day in keys %}
+							<tr><td>{{commits[day]}} contributions on {{day}}</td></tr>
+							{% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
