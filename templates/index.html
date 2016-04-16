@@ -17,7 +17,6 @@
     <link href="{{ url_for('static', filename='css/git-challenge.css') }}" rel="stylesheet">
     <link rel="icon" href="https://freetailhackers.github.io/img/FreetailLogo.png" type="image/png">
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/git-challenge.js') }}"></script>
 </head>
 
 <body>
@@ -48,10 +47,12 @@
         <h1>30 Day Git Challenge</h1>
         <p>Check your GitHub streak here!</p>
         <div class="input-group col-xs-4 col-xs-offset-4">
-            <input type="text" class="form-control input-lg" placeholder="Your Github Username">
-            <span class="input-group-btn">
-                <button class="btn-lg btn-default"><span class='glyphicon glyphicon-menu-right'></span></button>
-            </span>
+			<form action="{{ url_for('get-results')}}" method="POST">
+				<input type="text" class="form-control input-lg" name="username" placeholder="Your Github Username">
+				<span class="input-group-btn">
+					<button class="btn-lg btn-default submit"><span class='glyphicon glyphicon-menu-right'></span></button>
+				</span>
+			</form>
         </div>
         <br>
         <br>

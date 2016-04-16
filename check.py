@@ -3,7 +3,7 @@ import urllib2
 import requests
 import datetime
 
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from lxml import html
 from lxml import etree
 
@@ -16,6 +16,8 @@ def getGitHubActivity(github_username):
 
 @app.route('/')
 def index():
+#	if request.method == 'POST':
+#		return get_info(username)
 	return render_template('index.html', host=host)
 
 def get_streak(username, page_tree):
@@ -36,6 +38,11 @@ def get_commits(username, streak, page_tree):
 		current_iteration_day += datetime.timedelta(days=1)
 	return commit_dict
 
+@app.route('/results', endpoint='get-results', methods=['POST'])
+def get_results():
+	username = request.form['username']
+	return get_info(username)
+
 @app.route('/<username>')
 def get_info(username):
 	page = requests.get('https://github.com/'  + username)
@@ -48,7 +55,6 @@ def get_info(username):
 
 	commit_keys = commit_dict.keys()
 	commit_keys.sort()
-
 	return render_template('results.html', streak=streak[0], commits=commit_dict, keys=commit_keys)
 
 @app.route('/github/<github_username>')
