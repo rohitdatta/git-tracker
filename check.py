@@ -34,9 +34,8 @@ def get_commits(username, page_tree):
 	end_day = datetime.date.today() + datetime.timedelta(days=1)
 	while current_iteration_day != end_day:
 		current_commit = page_tree.xpath('//rect[@data-date="' + str(current_iteration_day) + '"]/@data-count')
-		if not current_commit:
-			break
-		commit_dict[str(current_iteration_day)] = current_commit[0]
+		if current_commit:
+			commit_dict[str(current_iteration_day)] = current_commit[0]
 		current_iteration_day += datetime.timedelta(days=1)
 		
 	commit_keys = commit_dict.keys()
@@ -57,7 +56,6 @@ def get_info(username):
 
 	commit_keys, commit_dict, streak = get_commits(username, page_tree)
 
-	print commit_dict
 	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys)
 
 @app.route('/github/<github_username>')
