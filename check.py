@@ -22,7 +22,7 @@ def get_custom_message(streak):
 
 @app.route('/')
 def index():
-	return render_template('index.html', host=host)
+	return render_template('index.html')
 
 def get_streak(username, page_tree):
 	current_streaks = page_tree.xpath('//*[@id="contributions-calendar"]/div[5]/span[2]/text()')
@@ -37,7 +37,12 @@ def get_commits(username, page_tree):
 	current_iteration_day = date.today() - timedelta(days=day_streak)
 	end_day = date.today() + timedelta(days=1)
 	while current_iteration_day != end_day:
-		current_commit = page_tree.xpath('//rect[@data-date="' + str(current_iteration_day) + '"]/@data-count')
+		page = requests.get('https://github.com/users/%s/contributions' % username)
+		tree = html.fromstring(page.content)
+		current_commit = tree.xpath('//rect[@data-date="' + str(current_iteration_day) + '"]/@data-count')
+		print current_commit
+		if current_commit:
+			print current_commit[0]
 		if current_commit:
 			commit_dict[str(current_iteration_day)] = current_commit[0]
 		current_iteration_day += timedelta(days=1)
