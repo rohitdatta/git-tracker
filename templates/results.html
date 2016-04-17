@@ -2,13 +2,13 @@
 {% block content %}
     <section class="main-hero jumbotron">
         <h1>Results So Far</h1>
-        <p>Current Streak: {{ streak }}</p>
+        <p>Current GitHub Streak: {{ streak }}</p>
 		<p>{{ message | safe}}</p>
+		<p>Here's a list of commits you've made since the challenge started:</p>
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-8 col-md-offset-2 column" id="box">
                     <table class="table">
-                        <caption class="text-center"></caption>
                         <tbody>
 							{% for day in keys %}
 							<tr><td>{{commits[day]}} contributions on {{day}}</td></tr>
