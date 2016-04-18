@@ -3,13 +3,11 @@
 .img-responsive {
   margin: 0 auto; }
 
+html {
+  height: 100%; }
+
 body {
-  background: #002db3;
-  background: -webkit-linear-gradient(top left, #002db3 0%, #009999 100%);
-  background: -moz-linear-gradient(top left, #002db3 0%, #009999 100%);
-  background: -o-linear-gradient(top left, #002db3 0%, #009999 100%);
-  background: linear-gradient(to bottom right, #002db3 0%, #009999 100%);
-  color: gitChallengeKhaki; }
+  color: #E0D1B8; }
   body ::-webkit-input-placeholder {
     /* WebKit browsers */
     font-family: Lato, sans-serif;
@@ -43,8 +41,14 @@ body {
   margin-top: 100px; }
 
 body {
-  background: #124E78;
-  color: #E0D1B8; }
+  background: #002db3;
+  background: -webkit-linear-gradient(top left, #124E78 0%, #E45243 100%);
+  background: -moz-linear-gradient(top left, #124E78 0%, #E45243 100%);
+  background: -o-linear-gradient(top left, #002db3 0%, #009999 100%);
+  background: linear-gradient(to bottom right, #124E78 0%, #E45243 100%);
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center; }
 
 /* Main hero */
 .main-hero {
@@ -153,7 +157,7 @@ form input {
   display: block;
   text-align: center;
   font-size: 18px;
-  color: #FFF;
+  color: white;
   -webkit-transition-duration: 0.25s;
   transition-duration: 0.25s;
   font-weight: 300;
@@ -163,7 +167,7 @@ form input {
     width: 250px; }
   form input::selection {
     color: white;
-    background: rgba(0, 99, 166, 0.75);
+    background: rgba(18, 78, 120, 0.75);
     /* WebKit/Blink Browsers */ }
   form input ::-moz-selection {
     background: #000;
@@ -173,14 +177,14 @@ form input {
   form input:focus {
     background-color: white;
     width: 300px;
-    color: #002db3; }
+    color: #124E78; }
 form button {
   appearance: none;
   outline: 0;
   background-color: white;
   border: 0;
   padding: 10px 15px;
-  color: #0063a6;
+  color: #124E78;
   border-radius: 3px;
   width: 250px;
   cursor: pointer;

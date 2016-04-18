@@ -60,27 +60,6 @@
 .about-items {
   margin-top: 20px; }
 
-/* Partners */
-.partners {
-  background-color: #ECF0F1;
-  text-align: center;
-  padding-left: 50px;
-  padding-right: 50px;
-  color: #333333; }
-  .partners a {
-    color: #333333;
-    font-weight: bold; }
-  .partners logos {
-    margin-top: 2em; }
-  .partners info {
-    /*min-height: 1em;*/
-    vertical-align: middle; }
-
-#partners-contact {
-  margin-top: 2em;
-  width: 100%;
-  font-size: 2em; }
-
 .row-centered {
   text-align: center; }
 
