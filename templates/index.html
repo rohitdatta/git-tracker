@@ -1,28 +1,18 @@
 {% extends 'base.html' %}
 {% block content %}
-    <section class="main-hero jumbotron">
+<div class="container check">
+	<div class="col-md-6 col-md-offset-3">
+		<a href="http://freetailhackers.com"><img class="img-responsive" class="center" src="{{url_for('static', filename='img/logo.svg')}}" width=200></a>
         <h1>30 Day Git Challenge</h1>
         <p>Check your GitHub streak here!</p>
-        <div class="input-group col-xs-4 col-xs-offset-4">
-			<form action="{{ url_for('get-results')}}" method="POST">
-				<input type="text" class="form-control input-lg" name="username" placeholder="Your Github Username">
-				<span class="input-group-btn">
-					<button class="btn-lg btn-default submit"><span class='glyphicon glyphicon-menu-right'></span></button>
-				</span>
+			<form action="{{ url_for('get-results')}}" method="POST" id="check">
+				<div class="form-group">
+					<input type="text" name="username" placeholder="GitHub Username" required>
+				</div>
+				<div class="form-group">
+					<button type="submit" id="submit-button">Check</button>
+				</div>
 			</form>
-        </div>
-        <br>
-        <br>
-        <div class="container">
-            <div class="row clearfix">
-                <div class="col-md-8 col-md-offset-2 column" id="box">
-                    <table class="table">
-                        <caption class="text-center"></caption>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </section>
+	</div>
+</div>
 {% endblock %}
