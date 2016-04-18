@@ -17,3 +17,6 @@ _mailinglist
 .tox
 .cache/
 .idea/
+
+.sass-cache/
+*.css.map
