@@ -3,7 +3,7 @@ import urllib2
 import requests
 from datetime import date, timedelta
 
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 from lxml import html
 from lxml import etree
 
@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 start_date = date(2016, 4, 7)
 
-def get_custom_message(streak):
+def get_custom_message(streak, commit_dict):
 	if date.today() - timedelta(days=streak) <= start_date:
 		return 'You\'re in great shape! Keep going for %s more days (until May 6, 2016) and you\'ll get a custom Freetail shirt!' % (str((date(2016, 5, 6) - date.today()).days))
 	else:
@@ -21,7 +21,7 @@ def get_custom_message(streak):
 		else:
 			return 'Our automated check isn\'t able to verify your completion towards a 30 day streak. If you believe this is a mistake, check to make sure all the repositories you committed to are public. If you still think there\'s an error, please reach out to <a href="mailto:hello@freetailhackers.com">hello@freetailhackers.com</a> so we can investigate further.'
 
-@app.route('/')
+@app.route('/', endpoint='index')
 def index():
 	return render_template('index.html')
 
@@ -48,8 +48,10 @@ def get_commits(username, streak):
 	commit_keys.sort()
 	return commit_keys, commit_dict
 
-@app.route('/results', endpoint='get-results', methods=['POST'])
+@app.route('/results', endpoint='get-results', methods=['GET', 'POST'])
 def get_results():
+	if request.method == 'GET':
+		return redirect(url_for('index'))
 	username = request.form['username']
 	return get_info(username)
 
@@ -57,15 +59,15 @@ def get_results():
 def get_info(username):
 	page = requests.get('https://github.com/'  + username)
 	if page.status_code != 200:
-		return render_template('404.html')
+		return render_template('error.html', error='')
 	page_tree = html.fromstring(page.content)
 	streak_list = get_streak(username, page_tree)
 	if streak_list:
 		streak = streak_list[0]
 	else:
-		return render_template('404.html')
+		return render_template('error.html')
 	commit_keys, commit_dict = get_commits(username, streak)
-	message = get_custom_message(int(streak.split()[0]))
+	message = get_custom_message(int(streak.split()[0]), commit_dict)
 	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys, message=message)
 
 if __name__ == '__main__':
