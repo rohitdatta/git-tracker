@@ -59,7 +59,11 @@ def get_info(username):
 	if page.status_code != 200:
 		return render_template('404.html')
 	page_tree = html.fromstring(page.content)
-	streak = get_streak(username, page_tree)[0]
+	streak_list = get_streak(username, page_tree)
+	if streak_list:
+		streak = streak_list[0]
+	else:
+		return render_template('404.html')
 	commit_keys, commit_dict = get_commits(username, streak)
 	message = get_custom_message(int(streak.split()[0]))
 	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys, message=message)
