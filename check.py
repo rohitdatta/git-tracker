@@ -55,7 +55,6 @@ def get_results():
 	username = request.form['username']
 	return get_info(username)
 
-@app.route('/<username>')
 def get_info(username):
 	page = requests.get('https://github.com/'  + username)
 	if page.status_code != 200:
@@ -69,6 +68,10 @@ def get_info(username):
 	commit_keys, commit_dict = get_commits(username, streak)
 	message = get_custom_message(int(streak.split()[0]), commit_dict)
 	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys, message=message)
+
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error.html', title='Page Not Found', message='That page doesn\'t exist'), 404
 
 if __name__ == '__main__':
 	app.run(debug=True)
