@@ -40,7 +40,7 @@ def render_chart(commit_dict):
 	chart.title = 'Commit History from %s' % str(start_date)
 	chart = chart.render()
 	unicode_chart=chart.decode('utf-8')
-	return render_template('test.html', chart=unicode_chart)
+	return unicode_chart
 
 def get_custom_message(streak, commit_dict):
 	if date.today() - timedelta(days=streak) <= start_date:
