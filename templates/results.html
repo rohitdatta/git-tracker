@@ -8,13 +8,7 @@
         <div class="container">
             <div class="row clearfix">
                 <div class="col-md-8 col-md-offset-2 column" id="box">
-                    <table class="table">
-                        <tbody>
-							{% for day in keys %}
-							<tr><td>{{commits[day]}} contributions on {{day}}</td></tr>
-							{% endfor %}
-                        </tbody>
-                    </table>
+					{{ chart|safe}}
                 </div>
             </div>
         </div>

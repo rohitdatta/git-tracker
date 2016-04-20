@@ -2,14 +2,45 @@ import json
 import urllib2
 import requests
 from datetime import date, timedelta
+import sys
 
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from lxml import html
 from lxml import etree
+import pygal
+from pygal.style import Style
+from pygal import Config
 
 app = Flask(__name__)
 
 start_date = date(2016, 4, 7)
+
+def render_chart(commit_dict):
+	style = Style(
+		transition='400ms ease-in',
+		font_family='googlefont:Josefin+Sans',
+		plot_background='transparent',
+		background='transparent'
+	)
+	print 'Commit DICT'
+	print commit_dict
+	config = Config()
+	params = {
+		'show_y_guides':False,
+		'show_x_guides':False,
+		'y_labels_major_count':5,
+		'show_minor_y_labels':False,
+		'style':style,
+	}
+	config = pygal.Config(no_prefix=True, **params)
+	chart = pygal.Line(config, height=400, x_label_rotation=20)
+	chart.x_labels = commit_dict.keys()
+	print(commit_dict.values())
+	chart.add('Commits', [int(commit_num) for commit_num in commit_dict.values()])
+	chart.title = 'Commit History from %s' % str(start_date)
+	chart = chart.render()
+	unicode_chart=chart.decode('utf-8')
+	return render_template('test.html', chart=unicode_chart)
 
 def get_custom_message(streak, commit_dict):
 	if date.today() - timedelta(days=streak) <= start_date:
@@ -36,9 +67,9 @@ def get_commits(username, streak):
 
 	current_iteration_day = start_date
 	end_day = date.today() + timedelta(days=1)
+	page = requests.get('https://github.com/users/%s/contributions' % username)
+	tree = html.fromstring(page.content)
 	while current_iteration_day != end_day:
-		page = requests.get('https://github.com/users/%s/contributions' % username)
-		tree = html.fromstring(page.content)
 		current_commit = tree.xpath('//rect[@data-date="' + str(current_iteration_day) + '"]/@data-count')
 		if current_commit:
 			commit_dict[str(current_iteration_day)] = current_commit[0]
@@ -67,7 +98,8 @@ def get_info(username):
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
 	commit_keys, commit_dict = get_commits(username, streak)
 	message = get_custom_message(int(streak.split()[0]), commit_dict)
-	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys, message=message)
+	chart = render_chart(commit_dict)
+	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys, message=message, chart=chart)
 
 @app.errorhandler(404)
 def page_not_found(error):

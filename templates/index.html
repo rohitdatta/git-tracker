@@ -3,8 +3,8 @@
 <div class="container header">
 	<div class="col-md-6 col-md-offset-3">
 		<a href="http://freetailhackers.com"><img class="img-responsive" class="center" src="{{url_for('static', filename='img/logo.svg')}}" width=200></a>
-        <h1>30 Day Git Challenge</h1>
-        <p>Check your GitHub streak here!</p>
+		<h1>30 Day Git Challenge</h1>
+		<p>Check your GitHub streak here!</p>
 			<form action="{{ url_for('get-results')}}" method="POST" id="check">
 				<div class="form-group">
 					<input type="text" name="username" placeholder="GitHub Username" required autocomplete="off">
