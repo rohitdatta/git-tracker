@@ -22,8 +22,6 @@ def render_chart(commit_dict):
 		plot_background='transparent',
 		background='transparent'
 	)
-	print 'Commit DICT'
-	print commit_dict
 	config = Config()
 	params = {
 		'show_y_guides':False,
@@ -74,19 +72,13 @@ def get_commits(username, streak):
 		if current_commit:
 			commit_dict[str(current_iteration_day)] = current_commit[0]
 		current_iteration_day += timedelta(days=1)
-	
-	commit_keys = commit_dict.keys()
-	commit_keys.sort()
-	return commit_keys, commit_dict
+	return commit_dict
 
 @app.route('/results', endpoint='get-results', methods=['GET', 'POST'])
 def get_results():
 	if request.method == 'GET':
 		return redirect(url_for('index'))
 	username = request.form['username']
-	return get_info(username)
-
-def get_info(username):
 	page = requests.get('https://github.com/'  + username)
 	if page.status_code != 200:
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
@@ -96,10 +88,11 @@ def get_info(username):
 		streak = streak_list[0]
 	else:
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
-	commit_keys, commit_dict = get_commits(username, streak)
+	commit_dict = get_commits(username, streak)
 	message = get_custom_message(int(streak.split()[0]), commit_dict)
 	chart = render_chart(commit_dict)
-	return render_template('results.html', streak=streak, commits=commit_dict, keys=commit_keys, message=message, chart=chart)
+	return render_template('results.html', streak=streak, commits=commit_dict, message=message, chart=chart)
+	return get_info(username)
 
 @app.errorhandler(404)
 def page_not_found(error):
