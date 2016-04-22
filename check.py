@@ -2,6 +2,7 @@ import json
 import urllib2
 import requests
 from datetime import date, timedelta
+from collections import OrderedDict
 import sys
 
 from flask import Flask, render_template, jsonify, request, redirect, url_for
@@ -33,12 +34,12 @@ def render_chart(commit_dict):
 	config = pygal.Config(no_prefix=True, **params)
 	chart = pygal.Line(config, height=400, x_label_rotation=20)
 	chart.x_labels = commit_dict.keys()
-	print(commit_dict.values())
+	print commit_dict
 	chart.add('Commits', [int(commit_num) for commit_num in commit_dict.values()])
 	chart.title = 'Commit History from %s' % str(start_date)
 	chart = chart.render()
 	unicode_chart=chart.decode('utf-8')
-	return unicode_chart
+	return unicode_chart	
 
 def get_custom_message(streak, commit_dict):
 	if date.today() - timedelta(days=streak) <= start_date:
@@ -72,7 +73,8 @@ def get_commits(username, streak):
 		if current_commit:
 			commit_dict[str(current_iteration_day)] = current_commit[0]
 		current_iteration_day += timedelta(days=1)
-	return commit_dict
+	sorted_dict = OrderedDict(sorted(commit_dict.items(), key=lambda t:t[0]))
+	return sorted_dict
 
 @app.route('/results', endpoint='get-results', methods=['GET', 'POST'])
 def get_results():
