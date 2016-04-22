@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-    <section class="main-hero jumbotron">
+<div class="container header">
         <h1>Results So Far</h1>
         <p>Current GitHub Streak: {{ streak }}</p>
 		<p>{{ message | safe}}</p>
@@ -12,5 +12,5 @@
                 </div>
             </div>
         </div>
-    </section>
+</div>
 {% endblock %}

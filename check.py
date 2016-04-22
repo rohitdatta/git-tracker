@@ -21,7 +21,8 @@ def render_chart(commit_dict):
 		transition='400ms ease-in',
 		font_family='googlefont:Josefin+Sans',
 		plot_background='transparent',
-		background='transparent'
+		background='transparent',
+		colors=('#124E78', '#E8537A')
 	)
 	config = Config()
 	params = {

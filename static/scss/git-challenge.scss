@@ -6,11 +6,18 @@ $freetailOrangeHighlight: #F9A027;
 $freetailBlue           : #124E78;
 $gitChallengeKhaki      : #E0D1B8;
 
-@import url(https://fonts.googleapis.com/css?family=Lato:400,700italic,900,900italic,400italic,700,300italic,300,100,100italic);
-
 $dark: #002db3;
 $light: #009999;
-$sans-serif-font: Lato, sans-serif;
+$sans-serif-font: 'Josefin Sans', sans-serif;
+@import url(https://fonts.googleapis.com/css?family=Josefin+Sans:400,100,100italic,300,300italic,400italic,600,600italic,700,700italic);
+
+* {
+	font-family: $sans-serif-font;
+}
+
+text {
+	color: $gitChallengeKhaki;
+}
 
 .img-responsive {
 	margin: 0 auto;
