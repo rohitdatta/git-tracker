@@ -15,8 +15,13 @@ $sans-serif-font: 'Josefin Sans', sans-serif;
 	font-family: $sans-serif-font;
 }
 
-text {
-	color: $gitChallengeKhaki;
+//Some fun SVG/CSS hardcoding
+.title, .legends .legend text, .axis.x text, .axis text.major {
+	fill: white !important;
+}
+
+.axis .line {
+	stroke: white !important;
 }
 
 .img-responsive {
@@ -28,7 +33,7 @@ html {
 }
 
 body {
-	color: $gitChallengeKhaki;
+	color: white !important;
 	
 	::-webkit-input-placeholder { /* WebKit browsers */
 		font-family: $sans-serif-font;

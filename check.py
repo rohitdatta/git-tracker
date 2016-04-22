@@ -15,6 +15,7 @@ from pygal import Config
 app = Flask(__name__)
 
 start_date = date(2016, 4, 7)
+sorted_dict = None
 
 def render_chart(commit_dict):
 	style = Style(
@@ -22,7 +23,7 @@ def render_chart(commit_dict):
 		font_family='googlefont:Josefin+Sans',
 		plot_background='transparent',
 		background='transparent',
-		colors=('#124E78', '#E8537A')
+		colors=('#F9A027', '#E8537A')
 	)
 	config = Config()
 	params = {
@@ -34,13 +35,21 @@ def render_chart(commit_dict):
 	}
 	config = pygal.Config(no_prefix=True, **params)
 	chart = pygal.Line(config, height=400, x_label_rotation=20)
-	chart.x_labels = commit_dict.keys()
+	chart.x_labels = [commit_date.strftime('%b %d') for commit_date in commit_dict.keys()]
 	print commit_dict
 	chart.add('Commits', [int(commit_num) for commit_num in commit_dict.values()])
-	chart.title = 'Commit History from %s' % str(start_date)
+	chart.title = 'Commit History from %s' % start_date.strftime('%b %d, %Y')
+	chart.value_formatter = lambda x: "%.0f" % x
 	chart = chart.render()
 	unicode_chart=chart.decode('utf-8')
-	return unicode_chart	
+	return unicode_chart
+
+@app.route('/<username>.csv')
+def generate_large_csv():
+    def generate():
+        for row in sorted_dict:
+            yield ','.join(row) + '\n'
+    return Response(generate(), mimetype='text/csv')
 
 def get_custom_message(streak, commit_dict):
 	if date.today() - timedelta(days=streak) <= start_date:
@@ -72,7 +81,7 @@ def get_commits(username, streak):
 	while current_iteration_day != end_day:
 		current_commit = tree.xpath('//rect[@data-date="' + str(current_iteration_day) + '"]/@data-count')
 		if current_commit:
-			commit_dict[str(current_iteration_day)] = current_commit[0]
+			commit_dict[current_iteration_day] = current_commit[0]
 		current_iteration_day += timedelta(days=1)
 	sorted_dict = OrderedDict(sorted(commit_dict.items(), key=lambda t:t[0]))
 	return sorted_dict
