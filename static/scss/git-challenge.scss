@@ -16,12 +16,17 @@ $sans-serif-font: 'Josefin Sans', sans-serif;
 }
 
 //Some fun SVG/CSS hardcoding
-.title, .legends .legend text, .axis.x text, .axis text.major {
-	fill: white !important;
+.title, .legends .legend text, .axis.x text, .axis text.major, .axis.y text {
+	fill: $gitChallengeKhaki !important;
+}
+
+.axis text.major {
+	font-size: 1em !important;
+	font-weight: bold;
 }
 
 .axis .line {
-	stroke: white !important;
+	stroke: $gitChallengeKhaki !important;
 }
 
 .img-responsive {
@@ -33,7 +38,7 @@ html {
 }
 
 body {
-	color: white !important;
+	color: $gitChallengeKhaki !important;
 	
 	::-webkit-input-placeholder { /* WebKit browsers */
 		font-family: $sans-serif-font;
@@ -60,16 +65,24 @@ body {
 
 	a {
 		font-weight: 600;
+		color: $gitChallengeKhaki;
 		&:hover {
-			color: rgba(#FFF, 0.8);
+			color: rgba($gitChallengeKhaki, 0.8);
 			text-decoration: none;
 		}
 	}
 }
 
 .header {
-	text-align: center;
 	margin-top: 100px;
+}
+
+.center {
+	text-align: center;
+}
+
+#results-header {
+	margin-top: 25px;
 }
 
 body {
@@ -82,44 +95,6 @@ body {
 	background-repeat: no-repeat;
 	background-position: center;
 }
-
-/* Main hero */
-.main-hero {
-	background: $freetailBlue;
-  font-family: 'Montserrat', sans-serif;
-  min-height: 100%;
-
-  p {
-      font-family: 'Montserrat', sans-serif;
-  }
-}
-
-.generated-row {
-  padding-top: 1%;
-  font-size: 125%;
-
-
-}
-
-.table {
-  border-color: black;
-}
-
-.commit-box {
-  li {
-    list-style-type: none;
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1em;
-  }
-}
-caption {
-  font-size: 150%;
-  color: black;
-}
-
-.table th, .table td {
-     border-top: none !important;
- }
 
 footer {
 	

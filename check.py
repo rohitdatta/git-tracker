@@ -19,7 +19,7 @@ sorted_dict = None
 
 def render_chart(commit_dict):
 	style = Style(
-		transition='400ms ease-in',
+		transition='200ms ease-in',
 		font_family='googlefont:Josefin+Sans',
 		plot_background='transparent',
 		background='transparent',
@@ -29,37 +29,39 @@ def render_chart(commit_dict):
 	params = {
 		'show_y_guides':False,
 		'show_x_guides':False,
-		'y_labels_major_count':5,
-		'show_minor_y_labels':False,
 		'style':style,
 	}
 	config = pygal.Config(no_prefix=True, **params)
-	chart = pygal.Line(config, height=400, x_label_rotation=20)
-	chart.x_labels = [commit_date.strftime('%b %d') for commit_date in commit_dict.keys()]
+	chart = pygal.Line(config, height=400, x_label_rotation=20, range=(0, max([int(commit_num) for commit_num in commit_dict.values()])))
+	chart.x_labels = [commit_date.strftime('%b %d').lstrip("0").replace(" 0", " ") for commit_date in commit_dict.keys()]
 	print commit_dict
 	chart.add('Commits', [int(commit_num) for commit_num in commit_dict.values()])
-	chart.title = 'Commit History from %s' % start_date.strftime('%b %d, %Y')
+	chart.title = 'Commit History from %s' % start_date.strftime('%B %d, %Y').lstrip("0").replace(" 0", " ")
 	chart.value_formatter = lambda x: "%.0f" % x
 	chart = chart.render()
 	unicode_chart=chart.decode('utf-8')
 	return unicode_chart
 
-@app.route('/<username>.csv')
-def generate_large_csv():
-    def generate():
-        for row in sorted_dict:
-            yield ','.join(row) + '\n'
-    return Response(generate(), mimetype='text/csv')
-
-def get_custom_message(streak, commit_dict):
+def get_custom_message(streak, commit_dict, committed_today):
+	days_left = get_days_left(date(2016, 5, 6), committed_today)
 	if date.today() - timedelta(days=streak) <= start_date:
-		return 'You\'re in great shape! Keep going for %s more days (until May 6, 2016) and you\'ll get a custom Freetail shirt!' % (str((date(2016, 5, 6) - date.today()).days))
+		if committed_today:
+			return 'You\'re in great shape overall! Keep going for %s more days (through May 6, 2016) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
+		else:
+			return 'You\'re in great shape overall! Keep going for %s more days (including today) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
 	else:
 		start_day = start_date + timedelta(days=1)
+		days_left = get_days_left(date(2016, 5, 7), committed_today)
 		if date.today() - timedelta(days=streak) <= start_date:
-			return 'Looks like you started a day late! No worries, we still want you to commit for 30 days, just commit for %s more days (until May 7, 2016) to get your custom Freetail shirt!' % (str((date(2016, 5, 7) - date.today()).days))
+			return 'Looks like you started a day late! No worries, we still want you to commit for 30 days, just commit for %s more days (until May 7, 2016) to get your custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
 		else:
-			return 'Our automated check isn\'t able to verify your completion towards a 30 day streak. If you believe this is a mistake, check to make sure all the repositories you committed to are public. If you still think there\'s an error, please reach out to <a href="mailto:hello@freetailhackers.com">hello@freetailhackers.com</a> so we can investigate further.'
+			return 'Our automated check isn\'t able to verify your completion towards a 30 day streak. If you believe this is a mistake, check to make sure all the repositories you committed to are public. If you still think there\'s an error, please reach out to <a href="mailto:hello@freetailhackers.com">hello@freetailhackers.com</a> so we can investigate further.', False
+		
+def get_days_left(end_date, today):
+	if today:
+		return (end_date - date.today()).days
+	else:
+		return (end_date - date.today() + timedelta(days=1)).days
 
 @app.route('/', endpoint='index')
 def index():
@@ -71,9 +73,7 @@ def get_streak(username, page_tree):
 
 def get_commits(username, streak):
 	commit_dict = {}
-	
 	day_streak = 0 if int(streak.split()[0]) == 0 else int(streak.split()[0]) - 1
-
 	current_iteration_day = start_date
 	end_day = date.today() + timedelta(days=1)
 	page = requests.get('https://github.com/users/%s/contributions' % username)
@@ -101,10 +101,10 @@ def get_results():
 	else:
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
 	commit_dict = get_commits(username, streak)
-	message = get_custom_message(int(streak.split()[0]), commit_dict)
+	committed_today = int(commit_dict[date.today()]) > 0
+	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
-	return render_template('results.html', streak=streak, commits=commit_dict, message=message, chart=chart)
-	return get_info(username)
+	return render_template('results.html', streak=streak, commits=commit_dict, message=message, chart=chart, today=committed_today, valid=valid)
 
 @app.errorhandler(404)
 def page_not_found(error):
