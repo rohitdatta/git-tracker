@@ -113,7 +113,7 @@ def get_results():
 	committed_today = int(commit_dict[date.today()]) > 0
 	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
-	return render_template('results.html', streak=streak, commits=commit_dict, chart=chart, message=message, valid=valid)
+	return render_template('results.html', streak=streak, commits=commit_dict, chart=chart, message=message, valid=valid, today=committed_today)
 
 @app.errorhandler(404)
 def page_not_found(error):
