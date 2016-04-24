@@ -60,13 +60,10 @@ def get_custom_message(streak, commit_dict, committed_today):
 
 def get_days_left(end_date, today):
 	# Gacky bc of Heroku weirdness
-	days_left = 0 if today else 1
-	curr_date = date.today()
-	end_date = date(2016, 5, 6)
-	while curr_date != end_date:
-		days_left += 1
-		curr_date += timedelta(days=1)
-	return days_left
+	if today:
+		return (date(2016, 5, 6) - date.today()).days
+	else:
+		return (date(2016, 5, 7) - date.today()).days
 
 @app.route('/', endpoint='index')
 def index():
