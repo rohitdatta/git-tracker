@@ -43,11 +43,6 @@ def render_chart(commit_dict):
 	return unicode_chart
 
 def get_custom_message(streak, commit_dict, committed_today):
-#	print days_left
-#	print 'BREAK'
-#	days_left = 3
-#	print 'Days left new' + str(days_left)
-#	print 'Days Left OLD' + str(get_days_left_old(date(2016, 5, 6), committed_today))
 	days_left = get_days_left(date(2016, 5, 6), committed_today)
 	if date.today() - timedelta(days=streak) <= start_date:
 		if committed_today:
@@ -64,6 +59,7 @@ def get_custom_message(streak, commit_dict, committed_today):
 			return 'Our automated check isn\'t able to verify your completion towards a 30 day streak. If you believe this is a mistake, check to make sure all the repositories you committed to are public. If you still think there\'s an error, please reach out to <a href="mailto:hello@freetailhackers.com">hello@freetailhackers.com</a> so we can investigate further.', False
 
 def get_days_left(end_date, today):
+	# Gacky bc of Heroku weirdness
 	days_left = 0 if today else 1
 	curr_date = date.today()
 	end_date = date(2016, 5, 6)
@@ -118,6 +114,10 @@ def get_results():
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error.html', title='Page Not Found', message='That page doesn\'t exist'), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+	return render_template('error.html', title='Internal Server Error', message='There appears to be an internal server error going on right now. Please contact <a href=\'mailto:tech@freetailhackers.com\'>tech@freetailhackers.com</a> to allow us to investigate further.')
 
 if __name__ == '__main__':
 	app.run(debug=True)
