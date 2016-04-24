@@ -43,21 +43,35 @@ def render_chart(commit_dict):
 	return unicode_chart
 
 def get_custom_message(streak, commit_dict, committed_today):
+#	print days_left
+#	print 'BREAK'
 	days_left = get_days_left(date(2016, 5, 6), committed_today)
+#	print 'Days left new' + str(days_left)
+#	print 'Days Left OLD' + str(get_days_left_old(date(2016, 5, 6), committed_today))
 	if date.today() - timedelta(days=streak) <= start_date:
 		if committed_today:
-			return 'You\'re in great shape overall! Keep going for %s more days (through May 6, 2016) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
+			return 'You\'re in great shape overall! Keep going for %s more days after today (through May 6, 2016) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
 		else:
-			return 'You\'re in great shape overall! Keep going for %s more days (including today) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
+			return 'You\'re in great shape overall! Keep going for %s more days, including today (through May 6, 2016) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
 	else:
 		start_day = start_date + timedelta(days=1)
 		days_left = get_days_left(date(2016, 5, 7), committed_today)
+		
 		if date.today() - timedelta(days=streak) <= start_date:
 			return 'Looks like you started a day late! No worries, we still want you to commit for 30 days, just commit for %s more days (until May 7, 2016) to get your custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
 		else:
 			return 'Our automated check isn\'t able to verify your completion towards a 30 day streak. If you believe this is a mistake, check to make sure all the repositories you committed to are public. If you still think there\'s an error, please reach out to <a href="mailto:hello@freetailhackers.com">hello@freetailhackers.com</a> so we can investigate further.', False
 
 def get_days_left(end_date, today):
+	days_left = 0 if today else 1
+	curr_date = date.today()
+	end_date = date(2016, 5, 6)
+	while curr_date != end_date:
+		days_left += 1
+		curr_date += timedelta(days=1)
+	return days_left
+
+def get_days_left_old(end_date, today):
 	if today:
 		return (end_date - date.today()).days
 	else:
