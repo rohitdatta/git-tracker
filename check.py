@@ -45,9 +45,10 @@ def render_chart(commit_dict):
 def get_custom_message(streak, commit_dict, committed_today):
 #	print days_left
 #	print 'BREAK'
-	days_left = get_days_left(date(2016, 5, 6), committed_today)
+#	days_left = 3
 #	print 'Days left new' + str(days_left)
 #	print 'Days Left OLD' + str(get_days_left_old(date(2016, 5, 6), committed_today))
+	days_left = get_days_left(date(2016, 5, 6), committed_today)
 	if date.today() - timedelta(days=streak) <= start_date:
 		if committed_today:
 			return 'You\'re in great shape overall! Keep going for %s more days after today (through May 6, 2016) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
@@ -70,12 +71,6 @@ def get_days_left(end_date, today):
 		days_left += 1
 		curr_date += timedelta(days=1)
 	return days_left
-
-def get_days_left_old(end_date, today):
-	if today:
-		return (end_date - date.today()).days
-	else:
-		return (end_date - date.today() + timedelta(days=1)).days
 
 @app.route('/', endpoint='index')
 def index():
@@ -118,7 +113,7 @@ def get_results():
 	committed_today = int(commit_dict[date.today()]) > 0
 	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
-	return render_template('results.html', streak=streak, commits=commit_dict, message=message, chart=chart, today=committed_today, valid=valid)
+	return render_template('results.html', streak=streak, commits=commit_dict, chart=chart, message=message, valid=valid)
 
 @app.errorhandler(404)
 def page_not_found(error):

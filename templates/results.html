@@ -3,8 +3,8 @@
 <div class="container center" id="results-header">
 		<a href="http://freetailhackers.com"><img class="img-responsive" class="center" src="{{url_for('static', filename='img/logo.svg')}}" width=100></a>
 		<h1>Results So Far</h1>
-        <p>Current GitHub Streak: {{ streak }} {% if today %}(Including Today){% elif valid %}<strong>(BUT YOU HAVEN'T COMMITTED TODAY!)</strong>{% else %}{% endif %}</p>
-		<p>{{ message | safe}}</p>
+	<p>Current GitHub Streak: {{ streak }} (Including Today)<strong>(BUT YOU HAVEN'T COMMITTED TODAY!)</strong></p>
+	<p>{{ message|safe }}</p>
 		<p>Here's a graph of your commit history since the challenge began:</p>
         <div class="container">
             <div class="row clearfix">
