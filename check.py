@@ -14,7 +14,6 @@ from pygal.style import Style
 from pygal import Config
 
 app = Flask(__name__)
-app.debug = True
 
 # Configure logging.
 app.logger.setLevel(logging.DEBUG)
@@ -117,7 +116,7 @@ def get_results():
 	else:
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
 	commit_dict = get_commits(username, streak)
-	committed_today = int(commit_dict[date.today()]) > 0
+	committed_today = int(commit_dict[date.today()]) > 0 if date.today() in commit_dict else int(commit_dict[date.today() - timedelta(days=1)]) > 0
 	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
 	return render_template('results.html', streak=streak, commits=commit_dict, chart=chart, message=message, valid=valid, today=committed_today)
@@ -131,4 +130,4 @@ def internal_error(error):
 	return render_template('error.html', title='Internal Server Error', message='There appears to be an internal server error going on right now. Please contact <a href=\'mailto:tech@freetailhackers.com\'>tech@freetailhackers.com</a> to allow us to investigate further.'), 500
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug=True)
