@@ -9,3 +9,10 @@ $(function() {
 		}
     });
 });
+
+$(window).bind('beforeunload', function(){
+	if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
+		$('body').find('#submit-button').removeClass('submitted');
+		$('body').find('#submit-button').html('Check');
+	}
+});

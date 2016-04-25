@@ -1,7 +1,7 @@
 import json
 import urllib2
 import requests
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from collections import OrderedDict
 import sys
 import logging
@@ -12,6 +12,8 @@ from lxml import etree
 import pygal
 from pygal.style import Style
 from pygal import Config
+import pytz
+from pytz import timezone
 
 app = Flask(__name__)
 
@@ -47,7 +49,6 @@ def render_chart(commit_dict):
 	config = pygal.Config(no_prefix=True, **params)
 	chart = pygal.Line(config, height=400, x_label_rotation=20, range=(0, max([int(commit_num) for commit_num in commit_dict.values()])))
 	chart.x_labels = [commit_date.strftime('%b %d').lstrip("0").replace(" 0", " ") for commit_date in commit_dict.keys()]
-#	print commit_dict
 	chart.add('Commits', [int(commit_num) for commit_num in commit_dict.values()])
 	chart.title = 'Commit History from %s' % start_date.strftime('%B %d, %Y').lstrip("0").replace(" 0", " ")
 	chart.value_formatter = lambda x: "%.0f" % x
@@ -116,7 +117,9 @@ def get_results():
 	else:
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
 	commit_dict = get_commits(username, streak)
-	committed_today = int(commit_dict[date.today()]) > 0 if date.today() in commit_dict else int(commit_dict[date.today() - timedelta(days=1)]) > 0
+	cst = timezone('US/Central')
+	today = cst.localize(datetime.now()).date()
+	committed_today = int(commit_dict[today]) > 0 if date.today() in commit_dict else False
 	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
 	return render_template('results.html', streak=streak, commits=commit_dict, chart=chart, message=message, valid=valid, today=committed_today)
