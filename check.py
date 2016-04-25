@@ -4,6 +4,7 @@ import requests
 from datetime import date, timedelta
 from collections import OrderedDict
 import sys
+import logging
 
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 from lxml import html
@@ -13,6 +14,19 @@ from pygal.style import Style
 from pygal import Config
 
 app = Flask(__name__)
+app.debug = True
+
+# Configure logging.
+app.logger.setLevel(logging.DEBUG)
+del app.logger.handlers[:]
+
+handler = logging.StreamHandler(stream=sys.stdout)
+handler.setLevel(logging.DEBUG)
+handler.formatter = logging.Formatter(
+    fmt=u"%(asctime)s level=%(levelname)s %(message)s",
+    datefmt="%Y-%m-%dT%H:%M:%SZ",
+)
+app.logger.addHandler(handler)
 
 start_date = date(2016, 4, 7)
 sorted_dict = None
@@ -117,4 +131,4 @@ def internal_error(error):
 	return render_template('error.html', title='Internal Server Error', message='There appears to be an internal server error going on right now. Please contact <a href=\'mailto:tech@freetailhackers.com\'>tech@freetailhackers.com</a> to allow us to investigate further.'), 500
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run()
