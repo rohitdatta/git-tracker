@@ -1,3 +1,9 @@
+$(window).bind('pageshow', function(event) {
+    if (event.originalEvent.persisted) {
+		window.location.reload();
+    }
+});
+
 $(function() {
     $('#check').on('submit', function(e) {
 		if(!$('input[name="username"]').val()) {
@@ -8,11 +14,4 @@ $(function() {
 			$('body').find('#submit-button').html('<div class="loader">Loading...</div>');
 		}
     });
-});
-
-$(window).bind('beforeunload', function(){
-	if (navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1) {
-		$('body').find('#submit-button').removeClass('submitted');
-		$('body').find('#submit-button').html('Check');
-	}
 });
