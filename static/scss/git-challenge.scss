@@ -35,6 +35,7 @@ $sans-serif-font: 'Josefin Sans', sans-serif;
 
 html {
 	min-height: 100%;
+	position: relative;
 }
 
 body {
@@ -94,11 +95,11 @@ body {
 	background-size: auto 100%;
 	background-repeat: no-repeat;
 	background-position: center;
+	margin-bottom: 66px;
 }
 
 footer {
 	
-	background-color: white;	
 	position: absolute;
 	bottom: 0;
 	width: 100%;

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container center" id="results-header">
-		<a href="http://freetailhackers.com"><img class="img-responsive" class="center" src="{{url_for('static', filename='img/logo.svg')}}" width=100></a>
+		<img class="img-responsive" class="center" src="{{url_for('static', filename='img/30Day.svg')}}" width=100>
 		<h1>Results So Far</h1>
 	<p>Current GitHub Streak: {{ streak }}{% if today %} (Including Today){% elif valid %}<strong> (BUT YOU HAVEN'T COMMITTED TODAY!)</strong>{%else%}{%endif%}</p>
 	<p>{{ message|safe }}</p>
@@ -14,4 +14,9 @@
             </div>
         </div>
 </div>
+<footer class="footer">
+	<div class="container">
+		<a href="http://freetailhackers.com"><img class="img-responsive" class="center" src="{{url_for('static', filename='img/logo.svg')}}" width=50></a>
+      </div>
+</footer>
 {% endblock %}
