@@ -133,4 +133,4 @@ def internal_error(error):
 	return render_template('error.html', title='Internal Server Error', message='There appears to be an internal server error going on right now. Please contact <a href=\'mailto:tech@freetailhackers.com\'>tech@freetailhackers.com</a> to allow us to investigate further.'), 500
 
 if __name__ == '__main__':
-	app.run(debug=True)
+	app.run()
