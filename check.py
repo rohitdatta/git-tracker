@@ -119,7 +119,7 @@ def get_results():
 	commit_dict = get_commits(username, streak)
 	cst = timezone('US/Central')
 	today = datetime.now(cst).date()
-	committed_today = int(commit_dict[today]) > 0 if date.today() in commit_dict else False
+	committed_today = int(commit_dict[today]) > 0 if today in commit_dict else False
 	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
 	return render_template('results.html', streak=streak, commits=commit_dict, chart=chart, message=message, valid=valid, today=committed_today)
