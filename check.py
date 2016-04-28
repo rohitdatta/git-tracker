@@ -118,7 +118,7 @@ def get_results():
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
 	commit_dict = get_commits(username, streak)
 	cst = timezone('US/Central')
-	today = cst.localize(datetime.now()).date()
+	today = datetime.now(cst).date()
 	committed_today = int(commit_dict[today]) > 0 if date.today() in commit_dict else False
 	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
@@ -133,4 +133,4 @@ def internal_error(error):
 	return render_template('error.html', title='Internal Server Error', message='There appears to be an internal server error going on right now. Please contact <a href=\'mailto:tech@freetailhackers.com\'>tech@freetailhackers.com</a> to allow us to investigate further.'), 500
 
 if __name__ == '__main__':
-	app.run()
+	app.run(debug=True)
