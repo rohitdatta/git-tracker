@@ -75,11 +75,10 @@ def get_custom_message(streak, commit_dict, committed_today):
 			return 'Our automated check isn\'t able to verify your completion towards a 30 day streak. If you believe this is a mistake, check to make sure all the repositories you committed to are public. If you still think there\'s an error, please reach out to <a href="mailto:hello@freetailhackers.com">hello@freetailhackers.com</a> so we can investigate further.', False
 
 def get_days_left(end_date, committed_today):
-	# Gacky bc of Heroku weirdness
 	if committed_today:
-		return (date(2016, 5, 6) - today).days
+		return (end_date - today).days
 	else:
-		return (date(2016, 5, 7) - today).days
+		return (end_date - today + timedelta(days=1)).days
 
 @app.route('/', endpoint='index')
 def index():
