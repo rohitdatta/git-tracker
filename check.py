@@ -30,6 +30,8 @@ handler.formatter = logging.Formatter(
 app.logger.addHandler(handler)
 
 start_date = date(2016, 4, 7)
+cst = timezone('US/Central')
+today = datetime.now(cst).date()
 sorted_dict = None
 
 def render_chart(commit_dict):
@@ -58,7 +60,7 @@ def render_chart(commit_dict):
 
 def get_custom_message(streak, commit_dict, committed_today):
 	days_left = get_days_left(date(2016, 5, 6), committed_today)
-	if date.today() - timedelta(days=streak) <= start_date:
+	if today - timedelta(days=streak) <= start_date:
 		if committed_today:
 			return 'You\'re in great shape overall! Keep going for %s more days after today (through May 6, 2016) and you\'ll get a custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
 		else:
@@ -67,17 +69,17 @@ def get_custom_message(streak, commit_dict, committed_today):
 		start_day = start_date + timedelta(days=1)
 		days_left = get_days_left(date(2016, 5, 7), committed_today)
 		
-		if date.today() - timedelta(days=streak) <= start_date:
+		if today - timedelta(days=streak) <= start_date:
 			return 'Looks like you started a day late! No worries, we still want you to commit for 30 days, just commit for %s more days (until May 7, 2016) to get your custom Freetail Hackers Git Challenge shirt!' % (str(days_left)), True
 		else:
 			return 'Our automated check isn\'t able to verify your completion towards a 30 day streak. If you believe this is a mistake, check to make sure all the repositories you committed to are public. If you still think there\'s an error, please reach out to <a href="mailto:hello@freetailhackers.com">hello@freetailhackers.com</a> so we can investigate further.', False
 
-def get_days_left(end_date, today):
+def get_days_left(end_date, committed_today):
 	# Gacky bc of Heroku weirdness
-	if today:
-		return (date(2016, 5, 6) - date.today()).days
+	if committed_today:
+		return (date(2016, 5, 6) - today).days
 	else:
-		return (date(2016, 5, 7) - date.today()).days
+		return (date(2016, 5, 7) - today).days
 
 @app.route('/', endpoint='index')
 def index():
@@ -91,7 +93,7 @@ def get_commits(username, streak):
 	commit_dict = {}
 	day_streak = 0 if int(streak.split()[0]) == 0 else int(streak.split()[0]) - 1
 	current_iteration_day = start_date
-	end_day = date.today() + timedelta(days=1)
+	end_day = today + timedelta(days=1)
 	page = requests.get('https://github.com/users/%s/contributions' % username)
 	tree = html.fromstring(page.content)
 	while current_iteration_day != end_day:
@@ -117,8 +119,6 @@ def get_results():
 	else:
 		return render_template('error.html', title='Invalid Username', message='That doesn\'t seem to be a valid GitHub username')
 	commit_dict = get_commits(username, streak)
-	cst = timezone('US/Central')
-	today = datetime.now(cst).date()
 	committed_today = int(commit_dict[today]) > 0 if today in commit_dict else False
 	message, valid = get_custom_message(int(streak.split()[0]), commit_dict, committed_today)
 	chart = render_chart(commit_dict)
